@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Sistem Sertifikasi')
             ->colors([
                 'primary' => Color::Amber,
             ])

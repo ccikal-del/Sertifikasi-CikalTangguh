@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\Pesertas;
 
+
 use App\Filament\Resources\Pesertas\Pages\CreatePeserta;
 use App\Filament\Resources\Pesertas\Pages\EditPeserta;
 use App\Filament\Resources\Pesertas\Pages\ListPesertas;
+use App\Filament\Resources\Pesertas\Pages\ViewPeserta;
 use App\Filament\Resources\Pesertas\Schemas\PesertaForm;
 use App\Filament\Resources\Pesertas\Tables\PesertasTable;
 use App\Models\Peserta;
@@ -13,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+
 
 class PesertaResource extends Resource
 {
@@ -44,6 +47,7 @@ class PesertaResource extends Resource
         return [
             'index' => ListPesertas::route('/'),
             'create' => CreatePeserta::route('/create'),
+             'view' => ViewPeserta::route('/{record}'),
             'edit' => EditPeserta::route('/{record}/edit'),
         ];
     }
