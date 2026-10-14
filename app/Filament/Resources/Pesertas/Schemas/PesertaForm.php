@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Pesertas\Schemas;
 
-use App\Models\Skema;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -15,40 +14,59 @@ class PesertaForm
     {
         return $schema
             ->components([
+
+
                 Select::make('skema_id')
                     ->label('Skema Sertifikasi')
-                    ->options(Skema::pluck('nama_skema', 'id'))
+                    ->relationship('skema', 'nama_skema')
                     ->searchable()
-                    ->required(),
+                    ->preload()
+                    ->nullable(),
+
+                TextInput::make('nik')
+                ->label('NIK')
+                ->required()
+                // Hapus baris ->numeric() di sini
+                ->length(16)
+                ->rule('digits:16')
+                ->unique(ignoreRecord: true)
+                ->validationMessages([
+                    'digits' => 'NIK harus tepat 16 digit.',
+                    'unique' => 'NIK sudah terdaftar.',
+                ]),
 
                 TextInput::make('nama')
                     ->label('Nama')
+                    ->required()
+                    ->maxLength(50)
+                    ->rule('regex:/^[\pL\s]+$/u')
+                    ->validationMessages([
+                        'regex' => 'Nama hanya boleh berisi huruf dan spasi.',
+                        'max' => 'Nama maksimal 50 karakter.',
+                    ]),
+
+                Select::make('gender')
+                    ->options(['male' => 'Male', 'female' => 'Female'])
                     ->required(),
 
-                TextInput::make('nis')
-                    ->label('NIS')
-                    ->required(),
+                // NO HP
+                TextInput::make('no_hp')
+                    ->label('No. HP')
+                    ->required()
+                    ->tel()
+                    ->minLength(12)
+                    ->maxLength(13)
+                    ->validationMessages([
+                        'min' => 'No. HP minimal 12 digit.',
+                        'max' => 'No. HP maksimal 13 digit.',
+                    ]),
 
-                TextInput::make('email')
-                    ->label('Email')
-                    ->email()
-                    ->required(),
-
-                TextInput::make('no_telepon')
-                    ->label('No. Telepon')
-                    ->required(),
 
                 Textarea::make('alamat')
                     ->label('Alamat')
-                    ->required(),
 
-                DatePicker::make('tanggal_lahir')
-                    ->label('Tanggal Lahir')
-                    ->required(),
 
-                TextInput::make('status')
-                    ->label('Status')
-                    ->required(),
-            ]);
+            ])
+            ->columns(2);
     }
 }

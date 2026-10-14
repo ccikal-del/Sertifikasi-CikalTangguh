@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Skema extends Model
 {
@@ -15,7 +16,8 @@ class Skema extends Model
         'deskripsi',
     ];
 
-    public function pesertas()
+    // SATU SKEMA BISA DIMILIKI BANYAK PESERTA
+    public function pesertas(): HasMany
     {
         return $this->hasMany(Peserta::class);
     }

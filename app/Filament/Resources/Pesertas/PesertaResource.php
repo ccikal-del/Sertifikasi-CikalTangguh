@@ -11,11 +11,13 @@ use App\Filament\Resources\Pesertas\Schemas\PesertaForm;
 use App\Filament\Resources\Pesertas\Tables\PesertasTable;
 use App\Models\Peserta;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-
+use Illuminate\Database\Eloquent\Builder;
+use Override;
 
 class PesertaResource extends Resource
 {
@@ -50,5 +52,23 @@ class PesertaResource extends Resource
              'view' => ViewPeserta::route('/{record}'),
             'edit' => EditPeserta::route('/{record}/edit'),
         ];
+    }
+
+    #[Override]
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+         /** @var User|null $user */
+        $user = Filament::auth()->user();
+
+        if ($user?->hasRole(['super_admin', 'admin'])) {
+            return $query;
+        }
+
+        if ($user?->hasRole('peserta')) {
+            return $query->where('user_id', $user->id);
+        }
+
+        return $query;
     }
 }

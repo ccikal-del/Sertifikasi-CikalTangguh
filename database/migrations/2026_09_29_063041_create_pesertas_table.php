@@ -6,33 +6,40 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
-{
-    Schema::create('pesertas', function (Blueprint $table) {
-        $table->id();
+    {
+        Schema::create('pesertas', function (Blueprint $table) {
+            $table->id();
 
-        $table->foreignId('skema_id')
-              ->constrained('skemas')
-              ->cascadeOnDelete();
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained('users')
+                ->cascadeOnDelete();
 
-        $table->string('nama');
-        $table->string('nis');
-        $table->string('email');
-        $table->string('no_telepon');
-        $table->text('alamat');
-        $table->date('tanggal_lahir');
-        $table->string('status');
+            $table->foreignId('skema_id')
+                ->nullable()
+                ->constrained('skemas')
+                ->cascadeOnDelete();
 
-        $table->timestamps();
-    });
-}
+            $table->string('nik')
+                ->unique()
+                ->nullable();
 
-    /**
-     * Reverse the migrations.
-     */
+            $table->string('nama');
+
+            $table->enum('gender', ['male', 'female'])
+                ->nullable();
+
+            $table->string('no_hp')
+                ->nullable();
+
+            $table->text('alamat')
+                ->nullable();
+
+            $table->timestamps();
+        });
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('pesertas');

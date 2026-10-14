@@ -4,27 +4,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Skema;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Peserta extends Model
 {
     use HasFactory;
-   
-   protected $fillable = [
-    'skema_id',
-    'nama',
-    'nis',
-    'email',
-    'no_telepon',
-    'alamat',
-    'tanggal_lahir',
-    'status',
-];
 
+    protected $fillable = [
+        'user_id',
+        'skema_id',
+        'nik',
+        'nama',
+        'gender',
+        'no_hp',
+        'alamat',
+    ];
 
-    
-   public function skema()
-{
-    return $this->belongsTo(Skema::class);
-}
+    // PESERTA DIMILIKI OLEH USER
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // PESERTA MEMILIKI SATU SKEMA
+    public function skema(): BelongsTo
+    {
+        return $this->belongsTo(Skema::class);
+    }
 }
